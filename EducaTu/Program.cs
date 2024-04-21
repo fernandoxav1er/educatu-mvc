@@ -1,3 +1,7 @@
+using EducaTu.Data;
+using EducaTu.Repository;
+using Microsoft.EntityFrameworkCore;
+
 namespace EducaTu
 {
     public class Program
@@ -8,6 +12,14 @@ namespace EducaTu
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDbContext<BancoContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Local"));
+
+            });
+
+            builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
             var app = builder.Build();
 
@@ -29,7 +41,7 @@ namespace EducaTu
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Login}/{action=Index}/{id?}");
 
             app.Run();
         }

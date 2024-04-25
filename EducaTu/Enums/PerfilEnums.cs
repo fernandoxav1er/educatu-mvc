@@ -4,6 +4,6 @@
     {
         Admin = 1,
         Aluno = 2,
-        Instutor = 3
+        Instrutor = 3
     }
 }

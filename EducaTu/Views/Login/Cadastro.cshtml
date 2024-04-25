@@ -1,0 +1,121 @@
+﻿@using EducaTu.Enums
+@model UsuarioModel
+
+@{
+    Layout = "_LayoutDeslogado";
+    ViewData["Title"] = "Cadastro";
+}
+
+<style>
+    body {
+        margin: 0px;
+    }
+
+    .container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .box {
+        width: 400px;
+    }
+</style>
+
+<form class="row g-3" asp-controller="Login" asp-action="Cadastro" method="post">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="nome" class="form-label">Nome Completo</label>
+            <input type="text" asp-for="NomeCompleto" class="form-control">
+            @Html.ValidationMessageFor(x => x.NomeCompleto)
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="login" class="form-label">Login</label>
+            <input type="text" asp-for="Login"  class="form-control" id="login">
+            @Html.ValidationMessageFor(x => x.Login)
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" asp-for="Email" class="form-control" id="email">
+            @Html.ValidationMessageFor(x => x.Email)
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="senha" class="form-label">Senha</label>
+            <input type="password" asp-for="Senha" class="form-control" id="senha">
+            @Html.ValidationMessageFor(x => x.Senha)
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="confirmarSenha" class="form-label">Confirme a senha</label>
+            <input type="password" asp-for="ConfirmarNovaSenha" class="form-control" id="confirmarSenha">
+            @Html.ValidationMessageFor(x => x.ConfirmarNovaSenha)
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="perfil" class="form-label">Tipo de perfil</label>
+            <select asp-for="Perfil" class="form-control">
+                <option value="">Selecione</option>
+                <option value="@PerfilEnums.Admin">Admin</option>
+                <option value="@PerfilEnums.Aluno">Aluno</option>
+                <option value="@PerfilEnums.Instrutor">Instrutor</option>
+            </select>
+            @Html.ValidationMessageFor(x => x.Perfil)
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="celular" class="form-label">Celular</label>
+            <input type="text" asp-for="Celular" class="form-control" id="celular" placeholder="(11) 93443-9889">
+            @Html.ValidationMessageFor(x => x.Celular)
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="dataNasc" class="form-label">Data de Nascimento</label>
+            <input type="date" asp-for="DataNascimento" class="form-control">
+            @Html.ValidationMessageFor(x => x.DataNascimento)
+        </div>
+    </div> 
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="sexo" class="form-label">Escolha o seu sexo</label>
+            <select asp-for="Sexo" class="form-control">
+                <option value="">Selecione</option>
+                <option value="M">Masculino</option>
+                <option value="F">Feminino</option>
+                <option value="O">Outros</option>
+            </select>
+            @Html.ValidationMessageFor(x => x.Sexo)
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="cep" class="form-label">Cep</label>
+            <input type="text" asp-for="Cep" class="form-control" id="cep" placeholder="07805-230">
+            @Html.ValidationMessageFor(x => x.Cep)
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="endereco" class="form-label">Endereço</label>
+            <input type="text" asp-for="Endereco" class="form-control" id="endereco" placeholder="Rua Mateus Marinho, 24, Faria Lima - SP">
+            @Html.ValidationMessageFor(x => x.Endereco)
+        </div>
+    </div>
+
+    <div class="d-grip gap-2 d-md-flex justify-content-md-end">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a class="btn btn-secondary" asp-controller="Login" asp-action="Index" role="button">Voltar</a>
+    </div>
+</form>

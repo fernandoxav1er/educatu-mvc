@@ -1,5 +1,6 @@
 ﻿using EducaTu.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EducaTu.Models
 {
@@ -20,14 +21,29 @@ namespace EducaTu.Models
         [Required(ErrorMessage = "Digite a senha do usuário")]
         public string? Senha { get; set; }
 
-        [Required(ErrorMessage = "Informe o perfil do usuário")]
+        [NotMapped]
+        [Required(ErrorMessage = "Confirme a nova senha do usuario")]
+        [Compare("Senha", ErrorMessage = "Senha não confere com a nova senha")]
+        public string? ConfirmarNovaSenha { get; set; }
+
+        [Required(ErrorMessage = "Escolha um perfil")]
         public PerfilEnums? Perfil { get; set; }
 
+        [Required(ErrorMessage = "Digite um número para contato")]
         public string? Celular { get; set; }
+
+        [Required(ErrorMessage = "Digite o CEP")]
         public string? Cep { get; set; }
+
+        [Required(ErrorMessage = "Digite o seu endereço")]
         public string? Endereco { get; set; }
+
+        [Required(ErrorMessage = "Escolha o gênero sexual")]
         public string? Sexo { get; set; }
+
+        [Required(ErrorMessage = "Digite sua data de nascimento")]
         public DateTime DataNascimento { get; set; }
+
         public DateTime DataCadastro { get; set; }
         public DateTime? DataAtualizacao { get; set; }
 

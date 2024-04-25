@@ -1,6 +1,7 @@
 ﻿using EducaTu.Models;
 using EducaTu.Repository;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EducaTu.Controllers
 {
@@ -14,6 +15,11 @@ namespace EducaTu.Controllers
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Cadastro()
         {
             return View();
         }
@@ -42,7 +48,26 @@ namespace EducaTu.Controllers
                 TempData["MensagemErro"] = $"Ops, {erro.Message}";
                 return RedirectToAction("Index");
             }
-
         }
+
+        [HttpPost]
+        public IActionResult Cadastro(UsuarioModel usuarioModel)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _usuarioRepository.Adicionar(usuarioModel);
+                    return RedirectToAction("Index", "Login");
+                }
+                return View();
+            }
+            catch (Exception erro)
+            {
+                TempData["MensagemErro"] = $"Ops, {erro.Message}";
+                return RedirectToAction("Index");
+            }
+        }
+
     }
 }

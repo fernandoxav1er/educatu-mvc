@@ -2,7 +2,7 @@
 
 namespace EducaTu.Controllers
 {
-    public class UsuarioController : Controller
+    public class UsuarioAlunoController : Controller
     {
         public IActionResult Index()
         {

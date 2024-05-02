@@ -18,8 +18,9 @@ namespace EducaTu
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Local"));
 
             });
-
+            
             builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            builder.Services.AddScoped<IPlanoRepository, PlanoRepository>();
 
             var app = builder.Build();
 

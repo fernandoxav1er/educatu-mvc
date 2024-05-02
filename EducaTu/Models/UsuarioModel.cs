@@ -46,6 +46,9 @@ namespace EducaTu.Models
 
         public DateTime DataCadastro { get; set; }
         public DateTime? DataAtualizacao { get; set; }
+        
+        [NotMapped]
+        public int? IdPlano{ get; set; }
 
         public bool SenhaValida(string senha)
         {

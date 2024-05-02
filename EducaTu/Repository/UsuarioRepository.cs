@@ -1,13 +1,15 @@
 ﻿using EducaTu.Data;
 using EducaTu.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace EducaTu.Repository
 {
     public interface IUsuarioRepository
     {
-        UsuarioModel BuscaPorLogin(string login);
-        UsuarioModel Adicionar(UsuarioModel usuarioModel);
+        UsuarioModel? BuscaPorLogin(string login);
+        Task<bool> ExisteLogin(int id);
+        Task<UsuarioModel> Adicionar(UsuarioModel usuarioModel);
     }
 
     public class UsuarioRepository : IUsuarioRepository
@@ -18,24 +20,34 @@ namespace EducaTu.Repository
             _context = bancoContext;
         }
 
-        public UsuarioModel BuscaPorLogin(string login)
+        public UsuarioModel? BuscaPorLogin(string login)
         {
-            UsuarioModel usuario = _context.Usuario.FirstOrDefault(x => x.Login.ToUpper() == login.ToUpper());
+            UsuarioModel? usuario = _context.Usuario.FirstOrDefault(x => x.Login.ToUpper() == login.ToUpper());
 
             if (usuario == null) throw new System.Exception("Não encontramos o usuário informado!");
+
             return usuario;
         }
 
-        public UsuarioModel Adicionar(UsuarioModel usuarioModel)
+        public async Task<UsuarioModel> Adicionar(UsuarioModel usuarioModel)
         {
             usuarioModel.DataCadastro = DateTime.Now;
             usuarioModel.DataAtualizacao = DateTime.Now;
 
-            _context.Usuario.Add(usuarioModel);
+            await _context.Usuario.AddAsync(usuarioModel);
             _context.SaveChanges();
 
             return usuarioModel;
 
+        }
+
+        public async Task<bool> ExisteLogin(int id)
+        {
+            var usuario = await _context.Usuario.FirstOrDefaultAsync(x => x.Id == id);
+            
+            if (usuario == null) return false;
+
+            return true;
         }
     }
 }

@@ -8,10 +8,13 @@ namespace EducaTu.Controllers
     public class LoginController : Controller
     {
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IPlanoRepository _planoRepository;
 
-        public LoginController(IUsuarioRepository usuarioRepository)
+        public LoginController(IUsuarioRepository usuarioRepository,
+                                IPlanoRepository planoRepository)
         {
             _usuarioRepository = usuarioRepository;
+            _planoRepository = planoRepository;
         }
 
         public IActionResult Index()
@@ -51,14 +54,31 @@ namespace EducaTu.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastro(UsuarioModel usuarioModel)
+        public async Task<IActionResult> CadastroAsync(UsuarioModel usuarioModel)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _usuarioRepository.Adicionar(usuarioModel);
-                    return RedirectToAction("Index", "Login");
+                    await _usuarioRepository.Adicionar(usuarioModel);
+                    var existeUsuario = await _usuarioRepository.ExisteLogin(usuarioModel.Id);
+
+                    if (existeUsuario)
+                    {
+                        if (usuarioModel.Perfil == Enums.PerfilEnums.Aluno)
+                        {
+                            UsuarioPlano obj = new UsuarioPlano 
+                            {
+                                IdPlano = usuarioModel.IdPlano,
+                                IdUsuario = usuarioModel.Id
+                            };
+
+                            await _planoRepository.AddUsuarioPlanoAsync(obj);
+                            return RedirectToAction("Index", "Plano");
+                        }
+
+                        return RedirectToAction("Index", "Login");
+                    }
                 }
                 return View();
             }

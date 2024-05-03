@@ -28,17 +28,23 @@ namespace EducaTu.Controllers
         }
 
         [HttpPost]
-        public IActionResult Entrar(LoginModel loginModel)
+        public async Task<IActionResult> Entrar(LoginModel loginModel)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    UsuarioModel usuario = _usuarioRepository.BuscaPorLogin(loginModel.Login);
+                    UsuarioModel? usuario = _usuarioRepository.BuscaPorLogin(loginModel.Login);
                     if (usuario != null)
                     {
                         if (usuario.SenhaValida(loginModel.Senha))
                         {
+                            var usuarioPlano = await _planoRepository.GetByUserAsync(usuario.Id);
+                            if (usuario.Perfil == Enums.PerfilEnums.Aluno && usuarioPlano == null)
+                            {
+                                return RedirectToAction("Index", "Plano");
+                            }
+
                             return RedirectToAction("Index", "Home");
                         }
                     }
@@ -61,24 +67,7 @@ namespace EducaTu.Controllers
                 if (ModelState.IsValid)
                 {
                     await _usuarioRepository.Adicionar(usuarioModel);
-                    var existeUsuario = await _usuarioRepository.ExisteLogin(usuarioModel.Id);
-
-                    if (existeUsuario)
-                    {
-                        if (usuarioModel.Perfil == Enums.PerfilEnums.Aluno)
-                        {
-                            UsuarioPlano obj = new UsuarioPlano 
-                            {
-                                IdPlano = usuarioModel.IdPlano,
-                                IdUsuario = usuarioModel.Id
-                            };
-
-                            await _planoRepository.AddUsuarioPlanoAsync(obj);
-                            return RedirectToAction("Index", "Plano");
-                        }
-
-                        return RedirectToAction("Index", "Login");
-                    }
+                    return RedirectToAction("Index", "Login");
                 }
                 return View();
             }

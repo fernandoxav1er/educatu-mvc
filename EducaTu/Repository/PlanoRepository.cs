@@ -7,7 +7,8 @@ namespace EducaTu.Repository
     public interface IPlanoRepository
     {
         Task<List<PlanoModel>> GetAllAsync();
-        Task<UsuarioPlano> AddUsuarioPlanoAsync(UsuarioPlano plano);
+        Task<UsuarioPlano> GetByUserAsync(int idUsuario);
+        Task<UsuarioPlano?> AddUsuarioPlanoAsync(UsuarioPlano plano);
     }
     public class PlanoRepository : IPlanoRepository
     {
@@ -28,6 +29,13 @@ namespace EducaTu.Repository
             await _context.UsuarioPlano.AddAsync(plano);
             _context.SaveChanges();
             return plano;
+        }
+
+        public async Task<UsuarioPlano?> GetByUserAsync(int idUsuario)
+        {
+            UsuarioPlano? usuarioPlano = await _context.UsuarioPlano.FirstOrDefaultAsync(x => x.Id == idUsuario);
+
+            return usuarioPlano;
         }
     }
 }

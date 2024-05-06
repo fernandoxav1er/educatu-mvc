@@ -68,31 +68,24 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="perfil" class="form-label">Tipo de perfil</label>
-                        <select asp-for="Perfil" id="perfil" class="form-control">
-                            <option value="">Selecione</option>
-                            <option value="@PerfilEnums.Aluno">Aluno</option>
-                            <option value="@PerfilEnums.Instrutor">Instrutor</option>
-                        </select>
-                        @Html.ValidationMessageFor(x => x.Perfil)
+                        <label for="cep" class="form-label">Cep</label>
+                        <input type="text" asp-for="Cep" class="form-control" id="cep" placeholder="07805-230">
+                        @Html.ValidationMessageFor(x => x.Cep)
                     </div>
                 </div>
-                <div class="col-md-6" id="idPlano" style="display:none">
+                <div class="col-md-6">
                     <div class="form-group">
-                        <label for="idPlano" class="form-label">Escolha de plano</label>
-                        <select asp-for="IdPlano" class="form-control">
-                            <option value="">Selecione</option>
-                            @foreach (var plano in ViewBag.Planos)
-                            {
-                                <option value="@plano.Id">@plano.NomePlano</option>
-                            }
-                        </select>
+                        <label for="endereco" class="form-label">Endereço</label>
+                        <input type="text" asp-for="Endereco" class="form-control" id="endereco" placeholder="Rua Mateus Marinho, 24, Faria Lima - SP">
+                        @Html.ValidationMessageFor(x => x.Endereco)
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -121,19 +114,29 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="cep" class="form-label">Cep</label>
-                        <input type="text" asp-for="Cep" class="form-control" id="cep" placeholder="07805-230">
-                        @Html.ValidationMessageFor(x => x.Cep)
+                        <label for="perfil" class="form-label">Tipo de perfil</label>
+                        <select asp-for="Perfil" id="perfil" class="form-control">
+                            <option value="">Selecione</option>
+                            <option value="@PerfilEnums.Aluno">Aluno</option>
+                            <option value="@PerfilEnums.Instrutor">Instrutor</option>
+                        </select>
+                        @Html.ValidationMessageFor(x => x.Perfil)
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" id="idPlano" style="display:none">
                     <div class="form-group">
-                        <label for="endereco" class="form-label">Endereço</label>
-                        <input type="text" asp-for="Endereco" class="form-control" id="endereco" placeholder="Rua Mateus Marinho, 24, Faria Lima - SP">
-                        @Html.ValidationMessageFor(x => x.Endereco)
+                        <label for="idPlano" class="form-label">Escolha de plano</label>
+                        <select asp-for="IdPlano" class="form-control">
+                            <option value="">Selecione</option>
+                            @foreach (var plano in ViewBag.Planos)
+                            {
+                                <option value="@plano.Id">@plano.NomePlano</option>
+                            }
+                        </select>
                     </div>
                 </div>
             </div>

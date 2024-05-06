@@ -42,6 +42,13 @@ namespace EducaTu.Controllers
                         if (usuario.SenhaValida(loginModel.Senha))
                         {
                             var usuarioPlano = await _planoRepository.GetByUserAsync(usuario.Id);
+
+                            if (usuario.Perfil == Enums.PerfilEnums.Aluno && usuario.IdPlano == null)
+                            {
+                                TempData["MensagemErro"] = $"Ops, erro no seu login, por favor entrar em contato com um administrador";
+                                return View("Index");
+                            }
+
                             if (usuario.Perfil == Enums.PerfilEnums.Aluno && usuarioPlano == null)
                             {
                                 return RedirectToAction("Index", "Plano", usuario);
@@ -70,6 +77,7 @@ namespace EducaTu.Controllers
                 if (ModelState.IsValid)
                 {
                     await _usuarioRepository.Adicionar(usuarioModel);
+                    TempData["MensagemSucesso"] = $"Cadastro com sucesso, faça o login na aplicação @{usuarioModel.Login}.";
                     return RedirectToAction("Index", "Login");
                 }
 

@@ -8,7 +8,8 @@ namespace EducaTu.Repository
     public interface IUsuarioRepository
     {
         UsuarioModel? BuscaPorLogin(string login);
-        Task<bool> ExisteLogin(int id);
+        bool ExisteUsuarioPorLogin(string login);
+        bool ExisteUsuarioPorId(int id);
         Task<UsuarioModel> Adicionar(UsuarioModel usuarioModel);
     }
 
@@ -31,6 +32,9 @@ namespace EducaTu.Repository
 
         public async Task<UsuarioModel> Adicionar(UsuarioModel usuarioModel)
         {
+            var busca = ExisteUsuarioPorLogin(usuarioModel.Login);
+            if (busca) throw new System.Exception("Nome de login não disponível, tente outro.");
+
             usuarioModel.DataCadastro = DateTime.Now;
             usuarioModel.DataAtualizacao = DateTime.Now;
 
@@ -41,10 +45,18 @@ namespace EducaTu.Repository
 
         }
 
-        public async Task<bool> ExisteLogin(int id)
+        public bool ExisteUsuarioPorId(int id)
         {
-            var usuario = await _context.Usuario.FirstOrDefaultAsync(x => x.Id == id);
+            var usuario =  _context.Usuario.FirstOrDefaultAsync(x => x.Id == id);
             
+            if (usuario == null) return false;
+
+            return true;
+        }
+        public bool ExisteUsuarioPorLogin(string login)
+        {
+            UsuarioModel? usuario =  _context.Usuario.FirstOrDefault(x => x.Login.ToUpper() == login.ToUpper());
+
             if (usuario == null) return false;
 
             return true;

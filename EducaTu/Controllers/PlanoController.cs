@@ -37,7 +37,6 @@ namespace EducaTu.Controllers
                 return RedirectToAction("Index", "Login");
             }
 
-            //return View("Index");
         }
     }
 }

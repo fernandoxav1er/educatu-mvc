@@ -36,6 +36,9 @@ namespace EducaTu.Migrations
                     b.Property<string>("NomePlano")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Planos");
@@ -74,6 +77,9 @@ namespace EducaTu.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("IdPlano")
+                        .HasColumnType("int");
+
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -106,10 +112,10 @@ namespace EducaTu.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("IdPlano")
+                    b.Property<int?>("IdPlano")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdUsuario")
+                    b.Property<int?>("IdUsuario")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

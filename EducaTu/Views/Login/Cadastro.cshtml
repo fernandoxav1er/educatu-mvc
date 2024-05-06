@@ -72,17 +72,6 @@
             @Html.ValidationMessageFor(x => x.Perfil)
         </div>
     </div>
-    <div class="col-md-4" id="idPlano" style="display:none">
-        <div class="form-group">
-            <label for="idPlano" class="form-label">Escolha de plano</label>
-            <select asp-for="IdPlano" class="form-control">
-                <option value="">Selecione</option>
-                <option value="1">Plano básico</option>
-                <option value="2">Plano intermediário</option>
-                <option value="3">Plano avançado</option>
-            </select>
-        </div>
-    </div>
     <div class="col-md-4">
         <div class="form-group">
             <label for="celular" class="form-label">Celular</label>
@@ -107,6 +96,18 @@
                 <option value="O">Outros</option>
             </select>
             @Html.ValidationMessageFor(x => x.Sexo)
+        </div>
+    </div>
+    <div class="col-md-4" id="idPlano" style="display:none">
+        <div class="form-group">
+            <label for="idPlano" class="form-label">Escolha de plano</label>
+            <select asp-for="IdPlano" class="form-control">
+                <option value="">Selecione</option>
+                @foreach (var plano in ViewBag.Planos)
+                {
+                    <option value="@plano.Id">@plano.NomePlano</option>
+                }
+            </select>
         </div>
     </div>
     <div class="col-md-4">

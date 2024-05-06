@@ -22,8 +22,10 @@ namespace EducaTu.Controllers
             return View();
         }
 
-        public IActionResult Cadastro()
+        public async Task<IActionResult> Cadastro()
         {
+            var planos = await _planoRepository.GetAllAsync();
+            ViewBag.Planos = planos;
             return View();
         }
 
@@ -42,14 +44,15 @@ namespace EducaTu.Controllers
                             var usuarioPlano = await _planoRepository.GetByUserAsync(usuario.Id);
                             if (usuario.Perfil == Enums.PerfilEnums.Aluno && usuarioPlano == null)
                             {
-                                return RedirectToAction("Index", "Plano");
+                                return RedirectToAction("Index", "Plano", usuario);
                             }
 
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToAction("Index", "Home"); 
                         }
                     }
                     TempData["MensagemErro"] = $"Usuário e/ou senha inválido(s). Por favor, tente novamente.";
                 }
+
                 return View("Index");
             }
             catch (Exception erro)
@@ -69,6 +72,10 @@ namespace EducaTu.Controllers
                     await _usuarioRepository.Adicionar(usuarioModel);
                     return RedirectToAction("Index", "Login");
                 }
+
+                var planos = await _planoRepository.GetAllAsync();
+                ViewBag.Planos = planos;
+
                 return View();
             }
             catch (Exception erro)

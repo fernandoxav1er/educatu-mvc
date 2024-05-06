@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EducaTu.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    [Migration("20240426025025_CriandoTabelaPlanos")]
-    partial class CriandoTabelaPlanos
+    [Migration("20240504165201_AtualizandoTabelaPlanoComValor")]
+    partial class AtualizandoTabelaPlanoComValor
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,9 @@ namespace EducaTu.Migrations
 
                     b.Property<string>("NomePlano")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -77,6 +80,9 @@ namespace EducaTu.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("IdPlano")
+                        .HasColumnType("int");
+
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -99,6 +105,25 @@ namespace EducaTu.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Usuario");
+                });
+
+            modelBuilder.Entity("EducaTu.Models.UsuarioPlano", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("IdPlano")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdUsuario")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UsuarioPlano");
                 });
 #pragma warning restore 612, 618
         }

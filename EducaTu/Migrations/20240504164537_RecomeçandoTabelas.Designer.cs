@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EducaTu.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    [Migration("20240426030520_CriandoTabelaPivoUsuarioPlano")]
-    partial class CriandoTabelaPivoUsuarioPlano
+    [Migration("20240504164537_RecomeçandoTabelas")]
+    partial class RecomeçandoTabelas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,6 +77,9 @@ namespace EducaTu.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("IdPlano")
+                        .HasColumnType("int");
+
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -109,10 +112,10 @@ namespace EducaTu.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("IdPlano")
+                    b.Property<int?>("IdPlano")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdUsuario")
+                    b.Property<int?>("IdUsuario")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

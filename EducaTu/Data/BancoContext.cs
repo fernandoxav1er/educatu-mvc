@@ -10,5 +10,7 @@ namespace EducaTu.Data
 
         }
         public DbSet<UsuarioModel> Usuario { get; set; }
+        public DbSet<PlanoModel> Planos { get; set; }
+        public DbSet<UsuarioPlano> UsuarioPlano { get; set; }
     }
 }

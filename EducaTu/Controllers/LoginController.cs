@@ -8,10 +8,13 @@ namespace EducaTu.Controllers
     public class LoginController : Controller
     {
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IPlanoRepository _planoRepository;
 
-        public LoginController(IUsuarioRepository usuarioRepository)
+        public LoginController(IUsuarioRepository usuarioRepository,
+                                IPlanoRepository planoRepository)
         {
             _usuarioRepository = usuarioRepository;
+            _planoRepository = planoRepository;
         }
 
         public IActionResult Index()
@@ -19,28 +22,37 @@ namespace EducaTu.Controllers
             return View();
         }
 
-        public IActionResult Cadastro()
+        public async Task<IActionResult> Cadastro()
         {
+            var planos = await _planoRepository.GetAllAsync();
+            ViewBag.Planos = planos;
             return View();
         }
 
         [HttpPost]
-        public IActionResult Entrar(LoginModel loginModel)
+        public async Task<IActionResult> Entrar(LoginModel loginModel)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    UsuarioModel usuario = _usuarioRepository.BuscaPorLogin(loginModel.Login);
+                    UsuarioModel? usuario = _usuarioRepository.BuscaPorLogin(loginModel.Login);
                     if (usuario != null)
                     {
                         if (usuario.SenhaValida(loginModel.Senha))
                         {
-                            return RedirectToAction("Index", "Home");
+                            var usuarioPlano = await _planoRepository.GetByUserAsync(usuario.Id);
+                            if (usuario.Perfil == Enums.PerfilEnums.Aluno && usuarioPlano == null)
+                            {
+                                return RedirectToAction("Index", "Plano", usuario);
+                            }
+
+                            return RedirectToAction("Index", "Home"); 
                         }
                     }
                     TempData["MensagemErro"] = $"Usuário e/ou senha inválido(s). Por favor, tente novamente.";
                 }
+
                 return View("Index");
             }
             catch (Exception erro)
@@ -51,15 +63,19 @@ namespace EducaTu.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastro(UsuarioModel usuarioModel)
+        public async Task<IActionResult> CadastroAsync(UsuarioModel usuarioModel)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _usuarioRepository.Adicionar(usuarioModel);
+                    await _usuarioRepository.Adicionar(usuarioModel);
                     return RedirectToAction("Index", "Login");
                 }
+
+                var planos = await _planoRepository.GetAllAsync();
+                ViewBag.Planos = planos;
+
                 return View();
             }
             catch (Exception erro)

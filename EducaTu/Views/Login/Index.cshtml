@@ -3,7 +3,7 @@
     Layout = "_LayoutDeslogado";
     ViewData["Title"] = "Login";
 }
-<link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+
 @if (TempData["MensagemErro"] != null)
 {
     <div class="alert alert-danger" role="alert">
@@ -11,43 +11,48 @@
         @TempData["MensagemErro"]
     </div>
 }
-<section class="sign-in">
-    <div class="container">
-        <div class="signin-content">
-            <div class="signin-image">
-                <figure><img src="https://i.ibb.co/ry0j5C4/login1.jpg" alt="sing up image"></figure>
-               
-            </div>
 
-            <div class="signin-form">
-<div class="signin-form">
-    <h2 class="form-title">Acesso ao EducaTu</h2>
-    <form asp-controller="Login" asp-action="Entrar" method="post" id="login-form">
+<style>
+    body {
+        margin: 0px;
+    }
+
+    .container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .box {
+        width: 400px;
+    }
+
+    .box-cadastro {
+        margin-top: 20px
+    }
+</style>
+
+<div class="box">
+    <h3 class="text-center">Acesso ao EducaTu</h3>
+    <form asp-controller="Login" asp-action="Entrar" method="post">
         <div class="form-group">
-            <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-            <input type="text" asp-for="Login" id="login" placeholder="Insira o seu Login" />
+            <label for="login">Endereço de e-mail</label>
+            <input type="text" asp-for="Login" class="form-control" id="login" placeholder="Insira o seu login">
             @Html.ValidationMessageFor(x => x.Login)
         </div>
-
         <div class="form-group">
-            
-            <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
-            <input type="password" asp-for="Senha" id="senha" placeholder="Insira sua senha" />
+            <label for="senha">Senha</label>
+            <input type="password" asp-for="Senha" class="form-control" id="senha" placeholder="Insira sua senha">
             @Html.ValidationMessageFor(x => x.Senha)
         </div>
-        <div class="form-group form-button">
-            <input type="submit" name="signin" id="signin" class="form-submit" value="Log in" />
-        </div>
+        <button type="submit" class="btn btn-success btn-block btn-lg">Entrar</button>
     </form>
-
+</div>
 <div class="box-cadastro">
     <p class="mb-4 text-sm mx-auto text-center">
         Novo por aqui? <a asp-action="Cadastro" asp-controller="Login" class="text-primary text-gradient font-weight-bold">Cadastre-se</a>
     </p>
 </div>
-
-
-      
- 
-</div>
-

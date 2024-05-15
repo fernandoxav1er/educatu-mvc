@@ -27,7 +27,6 @@ namespace EducaTu.Models
         [Compare("Senha", ErrorMessage = "Senha não confere com a nova senha")]
         public string? ConfirmarNovaSenha { get; set; }
 
-        [Required(ErrorMessage = "Escolha um perfil")]
         public PerfilEnums? Perfil { get; set; }
 
         [Required(ErrorMessage = "Digite um número para contato")]

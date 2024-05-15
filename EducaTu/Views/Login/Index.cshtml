@@ -4,93 +4,45 @@
     ViewData["Title"] = "Login";
 }
 
-@if (TempData["MensagemErro"] != null)
-{
-    <div class="alert alert-danger" role="alert">
-        @TempData["MensagemErro"]
-        <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close" style="float:right">X</button>
-    </div>
-}
-@if (TempData["MensagemSucesso"] != null)
-{
-    <div class="alert alert-success" role="alert">
-        @TempData["MensagemSucesso"]
-        <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close" style="float:right">X</button>
-    </div>
-}
 
-<style>
-    html,
-    body {
-        height: 100%;
-    }
+<link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
 
-    body {
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex-align: center;
-        align-items: center;
-        padding-top: 40px;
-        padding-bottom: 40px;
-        background-color: #f5f5f5;
-    }
+<div class="container">
 
-    .form-signin {
-        width: 100%;
-        max-width: 330px;
-        padding: 15px;
-        margin: auto;
-    }
-
-    .form-signin .checkbox {
-        font-weight: 400;
-    }
-
-    .form-signin .form-control {
-        position: relative;
-        box-sizing: border-box;
-        height: auto;
-        padding: 10px;
-        font-size: 16px;
-    }
-
-    .form-signin .form-control:focus {
-        z-index: 2;
-    }
-
-    .form-signin input[type="email"] {
-        margin-bottom: -1px;
-        border-bottom-right-radius: 0;
-        border-bottom-left-radius: 0;
-    }
-
-    .form-signin input[type="password"] {
-        margin-bottom: 10px;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-    }
-
-</style>
-
-
-<div class="text-center">
-    <form class="form-signin" asp-controller="Login" asp-action="Entrar" method="post">
-        <img class="mb-4" src="/img/educatu-logo.svg" alt="" width="120" height="120">
-        <div class="form-group">
-            <input type="text" asp-for="Login" class="form-control" id="login" placeholder="Insira o seu login" required autofocus>
-            @Html.ValidationMessageFor(x => x.Login)
+    @if (TempData["MensagemErro"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <p class="text-center">@TempData["MensagemErro"]</p>
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close" style="float:right">X</button>
         </div>
+    }
+    @if (TempData["MensagemSucesso"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["MensagemSucesso"]
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close" style="float:right">X</button>
+        </div>
+    }
+
+    <div class="text-center">
+        <form class="form-signin" asp-controller="Login" asp-action="Entrar" method="post">
+            <img class="mb-4" src="/img/educatu-logo.svg" alt="" width="120" height="120">
+            <div class="form-group">
+                <input type="text" asp-for="Login" class="form-control" id="login" placeholder="Insira o seu login" required autofocus>
+                @Html.ValidationMessageFor(x => x.Login)
+            </div>
         
-        <div class="form-group">
-            <input type="password" asp-for="Senha" class="form-control" id="senha" placeholder="Insira sua senha" required>
-            @Html.ValidationMessageFor(x => x.Senha)
-        </div>
+            <div class="form-group">
+                <input type="password" asp-for="Senha" class="form-control" id="senha" placeholder="Insira sua senha" required>
+                @Html.ValidationMessageFor(x => x.Senha)
+            </div>
 
-        <p class="mb-4 text-sm mx-auto text-center">
-            Novo por aqui? <a asp-action="Cadastro" asp-controller="Login" class="text-primary text-gradient font-weight-bold">Cadastre-se</a>
-        </p>
+            <p class="mb-4 text-sm mx-auto text-center">
+                Novo por aqui? <a asp-action="Cadastro" asp-controller="Login" class="text-primary text-gradient font-weight-bold">Cadastre-se</a>
+            </p>
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
-        <p class="mt-5 mb-3 text-muted">&copy; 2024-2025</p>
-    </form>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+        </form>
+    </div>
+
 </div>

@@ -32,7 +32,7 @@ namespace EducaTu.Repository
 
         public async Task<UsuarioPlano?> GetByUserAsync(int idUsuario)
         {
-            UsuarioPlano? usuarioPlano = await _context.UsuarioPlano.FirstOrDefaultAsync(x => x.Id == idUsuario);
+            UsuarioPlano? usuarioPlano = await _context.UsuarioPlano.FirstOrDefaultAsync(x => x.IdUsuario == idUsuario);
             return usuarioPlano;
         }
 

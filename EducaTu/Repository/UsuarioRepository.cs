@@ -7,7 +7,7 @@ namespace EducaTu.Repository
 {
     public interface IUsuarioRepository
     {
-        UsuarioModel? BuscaPorLogin(string login);
+        UsuarioModel BuscaPorLogin(string login);
         bool ExisteUsuarioPorLogin(string login);
         bool ExisteUsuarioPorId(int id);
         Task<UsuarioModel> Adicionar(UsuarioModel usuarioModel);
@@ -16,14 +16,15 @@ namespace EducaTu.Repository
     public class UsuarioRepository : IUsuarioRepository
     {
         private readonly BancoContext _context;
+
         public UsuarioRepository(BancoContext bancoContext)
         {
             _context = bancoContext;
         }
 
-        public UsuarioModel? BuscaPorLogin(string login)
+        public UsuarioModel BuscaPorLogin(string login)
         {
-            UsuarioModel? usuario = _context.Usuario.FirstOrDefault(x => x.Login.ToUpper() == login.ToUpper());
+            UsuarioModel usuario = _context.Usuario.FirstOrDefault(x => x.Login.ToLower() == login.ToLower());
 
             if (usuario == null) throw new System.Exception("Não encontramos o usuário informado!");
 
@@ -37,6 +38,7 @@ namespace EducaTu.Repository
 
             usuarioModel.DataCadastro = DateTime.Now;
             usuarioModel.DataAtualizacao = DateTime.Now;
+            usuarioModel.Perfil = Enums.PerfilEnums.Aluno;
 
             await _context.Usuario.AddAsync(usuarioModel);
             _context.SaveChanges();
@@ -53,9 +55,10 @@ namespace EducaTu.Repository
 
             return true;
         }
+
         public bool ExisteUsuarioPorLogin(string login)
         {
-            UsuarioModel? usuario =  _context.Usuario.FirstOrDefault(x => x.Login.ToUpper() == login.ToUpper());
+            UsuarioModel usuario =  _context.Usuario.FirstOrDefault(x => x.Login.ToUpper() == login.ToUpper());
 
             if (usuario == null) return false;
 

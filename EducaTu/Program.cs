@@ -1,4 +1,5 @@
 using EducaTu.Data;
+using EducaTu.Helper;
 using EducaTu.Repository;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,9 +19,17 @@ namespace EducaTu
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Local"));
 
             });
-            
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             builder.Services.AddScoped<IPlanoRepository, PlanoRepository>();
+            builder.Services.AddScoped<ISessao, Sessao>();
+
+            builder.Services.AddSession(o =>
+            {
+                o.Cookie.HttpOnly = true;
+                o.Cookie.IsEssential = true;
+            });
 
             var app = builder.Build();
 
@@ -35,14 +44,13 @@ namespace EducaTu
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthorization();
+            app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Login}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }

@@ -1,4 +1,5 @@
-﻿using EducaTu.Models;
+﻿using EducaTu.Helper;
+using EducaTu.Models;
 using EducaTu.Repository;
 using Microsoft.AspNetCore.Mvc;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -8,16 +9,20 @@ namespace EducaTu.Controllers
     public class PlanoController : Controller
     {
         private readonly IPlanoRepository _planoRepository;
+        private readonly ISessao _sessao;
 
-        public PlanoController(IPlanoRepository planoRepository)
+        public PlanoController(IPlanoRepository planoRepository,
+                                ISessao sessao)
         {
             _planoRepository = planoRepository;
+            _sessao = sessao;
         }
-        public async Task<IActionResult> Index(UsuarioModel usuario)
+        public async Task<IActionResult> Index()
         {
-            var planoUser = await _planoRepository.GetByIdAsync(usuario.IdPlano);
+            UsuarioModel usuarioLogado = _sessao.GetSessaoUsuario();
+            var planoUser = await _planoRepository.GetByIdAsync(usuarioLogado.IdPlano);
 
-            ViewBag.User = usuario;
+            ViewBag.User = usuarioLogado;
             ViewBag.PlanoByUser = planoUser;
 
             return View();
@@ -29,7 +34,11 @@ namespace EducaTu.Controllers
             try
             {
                 await _planoRepository.AddUsuarioPlanoAsync(usuarioPlanoModel);
-                return RedirectToAction("Index", "Home");
+                _sessao.RemoverSessaoUsuario();
+
+                TempData["MensagemSucesso"] = $"Cadastro com sucesso, faça o login!";
+
+                return RedirectToAction("Index", "Login");
             }
             catch (Exception erro)
             {

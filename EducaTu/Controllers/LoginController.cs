@@ -1,4 +1,5 @@
-﻿using EducaTu.Models;
+﻿using EducaTu.Helper;
+using EducaTu.Models;
 using EducaTu.Repository;
 using Microsoft.AspNetCore.Mvc;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -9,12 +10,15 @@ namespace EducaTu.Controllers
     {
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IPlanoRepository _planoRepository;
+        private readonly ISessao _sessao;
 
         public LoginController(IUsuarioRepository usuarioRepository,
-                                IPlanoRepository planoRepository)
+                                IPlanoRepository planoRepository,
+                                ISessao sessao)
         {
             _usuarioRepository = usuarioRepository;
             _planoRepository = planoRepository;
+            _sessao = sessao;
         }
 
         public IActionResult Index()
@@ -29,6 +33,12 @@ namespace EducaTu.Controllers
             return View();
         }
 
+        public IActionResult Sair()
+        {
+            _sessao.RemoverSessaoUsuario();
+            return RedirectToAction("Index", "Home");
+        }
+
         [HttpPost]
         public async Task<IActionResult> Entrar(LoginModel loginModel)
         {
@@ -36,22 +46,25 @@ namespace EducaTu.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    UsuarioModel? usuario = _usuarioRepository.BuscaPorLogin(loginModel.Login);
+                    UsuarioModel usuario = _usuarioRepository.BuscaPorLogin(loginModel.Login);
                     if (usuario != null)
                     {
                         if (usuario.SenhaValida(loginModel.Senha))
                         {
-                            var usuarioPlano = await _planoRepository.GetByUserAsync(usuario.Id);
 
                             if (usuario.Perfil == Enums.PerfilEnums.Aluno && usuario.IdPlano == null)
                             {
                                 TempData["MensagemErro"] = $"Ops, erro no seu login, por favor entrar em contato com um administrador";
                                 return View("Index");
                             }
+                            
+                            _sessao.CriarSessaoUsuario(usuario);
+
+                            var usuarioPlano = await _planoRepository.GetByUserAsync(usuario.Id);
 
                             if (usuario.Perfil == Enums.PerfilEnums.Aluno && usuarioPlano == null)
                             {
-                                return RedirectToAction("Index", "Plano", usuario);
+                                return RedirectToAction("Index", "Plano");
                             }
 
                             return RedirectToAction("Index", "Home"); 
@@ -77,8 +90,8 @@ namespace EducaTu.Controllers
                 if (ModelState.IsValid)
                 {
                     await _usuarioRepository.Adicionar(usuarioModel);
-                    TempData["MensagemSucesso"] = $"Cadastro com sucesso, faça o login na aplicação @{usuarioModel.Login}.";
-                    return RedirectToAction("Index", "Login");
+                    _sessao.CriarSessaoUsuario(usuarioModel);
+                    return RedirectToAction("Index", "Plano");
                 }
 
                 var planos = await _planoRepository.GetAllAsync();

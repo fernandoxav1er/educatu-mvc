@@ -1,11 +1,45 @@
-﻿@{
-    ViewData["Title"] = "Home";
-}
+﻿@using EducaTu.Helper
+@inject ISessao _sessao;
 @model LoginModel
+@{
+    ViewData["Title"] = "Home";
+    var usuarioLogado = _sessao.GetSessaoUsuario();
+}
 
 <link rel="stylesheet" href="~/css/cursos.css" asp-append-version="true" />
 
+<script>
+
+    function loadCursoDetails(cursoId) {
+        $.ajax({
+            url: '/Home/GetCursoDetails/' + cursoId,
+            type: 'GET',
+            success: function (result) {
+                $("#curso").html(result);
+                $('#modalCursoDetalhes').modal();
+            },
+            error: function (xhr, status, error) {
+                console.log('Erro:', xhr, status, error);
+                alert('Erro ao carregar os detalhes do curso.');
+            }
+        });
+    }
+
+</script>
+
 <header class="bg-gray py-5 mb-5" style="background-color: #f5f5f5; margin: 0px !important;">
+    @if (TempData["MensagemErro"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <p class="text-center">@TempData["MensagemErro"]</p>
+        </div>
+    }
+    @if (TempData["MensagemSucesso"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            <p class="text-center">@TempData["MensagemSucesso"]</p>
+        </div>
+    }
     <div class="container h-100">
         <div class="col-lg-6 col-md-8 mx-auto">
             <img class="mx-auto d-block mb-4 pt-8" style="margin-top:30px" src="/img/educatu-logo.svg" alt="" width="120" height="120">
@@ -18,23 +52,45 @@
 <div class="album py-5">
     <div class="container">
         <div class="row g-3">
-
-            <div class="col-12 col-sm-6 col-md-4 mb-3">
-                <div class="card shadow-sm">
-                    <div class="contimg">
-                        <img class="bd-placeholder-img card-img-top" src="/img/csharp-css.png" alt="" width="220" height="160">
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+            @foreach (var curso in ViewBag.Cursos)
+            {
+                <div class="col-12 col-sm-6 col-md-4 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="contimg">
+                            <img class="bd-placeholder-img card-img-top" src="@curso.TipoImagem" alt="" width="220" height="160">
+                        </div>
+                        <div class="card-body">
+                            <h6>@curso.NomeCurso</h6>
+                            <p>@curso.AutorCurso</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="loadCursoDetails('@curso.Id')">Detalhes</button>
+                                    @if (usuarioLogado != null)
+                                    {
+                                        <a asp-action="FavoritarCurso" asp-route-cursoId="@curso.Id" class="btn btn-sm btn-outline-danger"><i class="fas fa-heart"></i> Favoritar</a>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div> 
+                </div> 
+            }
+        </div>
+    </div>
+</div>
 
+<div id="modalCursoDetalhes" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Listagem de contatos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="curso"></div>
+            </div>
         </div>
     </div>
 </div>

@@ -23,6 +23,7 @@ namespace EducaTu
 
             builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             builder.Services.AddScoped<IPlanoRepository, PlanoRepository>();
+            builder.Services.AddScoped<ICursoRepository, CursoRepository>();
             builder.Services.AddScoped<ISessao, Sessao>();
 
             builder.Services.AddSession(o =>

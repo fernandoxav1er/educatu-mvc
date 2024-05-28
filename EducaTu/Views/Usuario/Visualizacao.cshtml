@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Visualização";
+}
+
+<div class="container" style="margin-top: 110px;">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe width="560" height="315" src="@ViewBag.Curso.IFrameVideo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h2>@ViewBag.Curso.NomeCurso</h2>
+            <p>@ViewBag.Curso.DescricaoCurso</p>
+            <p>@ViewBag.Curso.AutorCurso</p>
+        </div>
+    </div>
+</div>

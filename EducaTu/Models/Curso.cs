@@ -3,10 +3,11 @@
     public class Curso
     {
         public int Id { get; set; }
-        public string Nome { get; set; }
-        public string Descricao { get; set; }
-        public string IFrame { get; set; }
-        public string Tipo { get; set; }
+        public string NomeCurso { get; set; }
+        public string DescricaoCurso { get; set; }
+        public string IFrameVideo { get; set; }
+        public string TipoImagem { get; set; }
+        public string AutorCurso { get; set; }
         public int CriadoPor { get; set; }
     }
 }
